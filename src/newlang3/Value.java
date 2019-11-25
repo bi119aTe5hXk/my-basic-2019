@@ -1,7 +1,11 @@
 package newlang3;
 
+/**
+ * Value interface
+ */
 public abstract class Value {
-    // 実装すべきコンストラクタ
+	// conststra
+	
     public Value(String s) {
     };
 
@@ -17,19 +21,17 @@ public abstract class Value {
     public Value(String s, ValueType t) {
     };
 
-    public abstract String get_sValue();
+	public abstract String getSValue();
 
-    public abstract String getSValue();
+	// Output as String, convert if nessnary
+	public abstract int getIValue();
 
-    // ストリング型で値を取り出す。必要があれば、型変換を行う。
-    public abstract int getIValue();
+	// out as Int
+	public abstract double getDValue();
 
-    // 整数型で値を取り出す。必要があれば、型変換を行う。
-    public abstract double getDValue();
+	// Out as double
+	public abstract boolean getBValue();
 
-    // 小数点型で値を取り出す。必要があれば、型変換を行う。
-    public abstract boolean getBValue();
-
-    // 論理型で値を取り出す。必要があれば、型変換を行う。
-    public abstract ValueType getType();
+	// out as bool
+	public abstract ValueType getType();
 }

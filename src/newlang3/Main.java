@@ -1,32 +1,45 @@
+
 package newlang3;
 
-import java.io.FileNotFoundException;
+public class Main{
 
-public class Main {
+    public static void main(String[] args) throws Exception {
 
-    public static void main(String[] args) {
-        String fname = "test.bas";
-        if (args.length > 0) {
+        String fname = "src/newlang3/sample.bas";
+        if (args.length > 0)
             fname = args[0];
-        }
-        LexicalAnalyzer la = null;
-        try {
-            la = new LexicalAnalyzerImpl(fname);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+
+        LexicalAnalyzer la = new LexicalAnalyzerImpl(fname);
+
         while (true) {
-            LexicalUnit lu = null;
             try {
-                lu = la.get();
+                LexicalUnit lu = la.get();
+                
+                if (lu.getType() == LexicalType.EOF) {
+                    break;
+                }
+                System.out.println(lu);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            System.out.println(lu);
-            if (lu.getType() == LexicalType.EOF) {
-                break;
-            }
         }
+        
+        
+        
+        
+        
+  
+//        System.out.println("basic parser");
+//        Environment		env = new Environment(la);
+//        LexicalUnit		first = la.get();
+//        
+//        Node program = Program.isMatch(env, first);
+//        if (program != null && program.Parse()) {
+//        	System.out.println(program);
+//        	System.out.println("value = " + program.getValue());
+//        }
+//        else System.out.println("syntax error");
+
     }
 
 }
