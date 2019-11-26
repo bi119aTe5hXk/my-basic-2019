@@ -20,6 +20,10 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
 	private static Map<String, LexicalUnit> special = new HashMap<String, LexicalUnit>();
 
 	static {
+		op.put("DO", new LexicalUnit(LexicalType.DO));// not work
+		op.put("WHILE", new LexicalUnit(LexicalType.WHILE));
+		op.put("UNTIL", new LexicalUnit(LexicalType.UNTIL));
+		op.put("LOOP", new LexicalUnit(LexicalType.LOOP));
 		op.put("IF", new LexicalUnit(LexicalType.IF));
 		op.put("THEN", new LexicalUnit(LexicalType.THEN));
 		op.put("ELSE", new LexicalUnit(LexicalType.ELSE));
@@ -36,10 +40,7 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
 		op.put("WEND", new LexicalUnit(LexicalType.WEND));
 		op.put("END", new LexicalUnit(LexicalType.END));
 		op.put("DOT", new LexicalUnit(LexicalType.DOT));
-		op.put("DO", new LexicalUnit(LexicalType.DO));// not work
-		op.put("WHILE", new LexicalUnit(LexicalType.WHILE));
-		op.put("UNTIL", new LexicalUnit(LexicalType.UNTIL));
-		op.put("LOOP", new LexicalUnit(LexicalType.LOOP));
+		
 
 		special.put("\n", new LexicalUnit(LexicalType.NL));
 		special.put("\r", new LexicalUnit(LexicalType.NL));
@@ -104,9 +105,11 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
 			}
 		}
 		LexicalUnit lu = op.get(target);
-		if (lu == null)
+		//System.out.println("target is:" + target);
+		//System.out.println("lu is:" + lu);
+		if (lu == null) {
 			return new LexicalUnit(LexicalType.NAME, new ValueImpl(target));
-
+		}
 		return lu;
 	}
 
@@ -145,19 +148,21 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
 	}
 
 	private LexicalUnit getSpecial(String target) throws IOException {
-		nextchar = reader.read();
-		String str = String.valueOf((char) nextchar);
-		
-		if (special.containsKey(target + str)) {
-			target += str;
+		while (true) {
+			nextchar = reader.read();
+			String str = String.valueOf((char) nextchar);
 			
-		} else {
-			reader.unread(nextchar);
-			//System.out.println("target is:" +  target + "\tstr is:" + str);
-			return special.get(target);
+			if (special.containsKey(target + str)) {
+				
+	            target += str;
+	        } else {
+	        	
+	            reader.unread(nextchar);
+	            //System.out.println("target is:" + target + "\tstr is:" + str);
+	            return special.get(target);
+	        }
 		}
 		
-		return new LexicalUnit(LexicalType.NL);
 	}
 
 	@Override
