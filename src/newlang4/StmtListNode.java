@@ -27,18 +27,17 @@ public class StmtListNode extends Node{
 	}
 	
 	public static Node getHandler(Environment env) {
-		//if ( !isFirst(lu) ) return null;
 		return new StmtListNode(env);
 	}
 	
 	
 	public Value getValue() throws Exception {
-//		for(int i = 0; i<stmt_list.size(); i++){
-//			stmt_list.get(i).getValue();
-//		}
-	    for (Node stmt : stmt_list) {
-	      stmt.getValue();
-	    }
+		for(int i=0;i<stmt_list.size();i++){
+			stmt_list.get(i).getValue();
+		}
+//	    for (Node stmt : stmt_list) {
+//	      stmt.getValue();
+//	    }
         return null;
     }
 	

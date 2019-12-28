@@ -27,7 +27,6 @@ public class ProgramNode extends Node {
 	
 	public static Node getHandler(LexicalUnit lu, Environment env) {
 		return StmtListNode.getHandler(env);
-		//return new ProgramNode(env);
 	}
 	
 
@@ -38,22 +37,22 @@ public class ProgramNode extends Node {
 		return null;
 	}
 	
+	@Override
 	public String toString() {
-        if (type == NodeType.PROGRAM) 
+        if (type == NodeType.PROGRAM) {
         	return "PROGRAM";
-        else 
+        } else {
         	return "Node";
+        }
     }
 	
 	@Override
 	  public boolean parse() throws Exception {
 		LexicalUnit first = env.getInput().get();
-
         if (StmtListNode.isFirst(first)) {
         	Node handler = StmtListNode.getHandler(env);
         	handler.parse();
         }
-
 		return true;
 	  }
 }

@@ -78,18 +78,20 @@ public class ForNode extends Node {
 		}
 	}
 	
-//	public Value getValue() throws Exception {
-//        subst.getValue();
-//        while (true) {
-//            if (env.getVariable(step).getValue().getIValue() > max.getValue().getIValue()) 
-//            	return null;
-//            op.getValue();
-//            env.getVariable(step).setValue(new ExprNode(
-//            		env.getVariable(step), 
-//            		ConstNode.getHandler(new ValueImpl("1", ValueType.INTEGER), env), 
-//            		LexicalType.ADD).getValue());
-//        }
-//    }
+	@Override
+	public Value getValue() throws Exception {
+        subst.getValue();
+        while (true) {
+            if (env.getVariable(update).getValue().getIValue() > max.getValue().getIValue()) { 
+            	return null;
+            }
+            op.getValue();
+            env.getVariable(update).setValue(new ExprNode(
+            		env.getVariable(update), 
+            		ConstNode.getHandler(new ValueImpl("1", ValueType.INTEGER), env), 
+            		LexicalType.ADD).getValue());
+        }
+    }
 	@Override
 	public String toString() {
         return String.format("FOR(FROM:"+ subst +" TO "+ max+";(update_object)" + update + "){"+op+"} ");

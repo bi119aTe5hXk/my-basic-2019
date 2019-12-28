@@ -61,42 +61,42 @@ public class CondNode extends Node {
 		return true;
 	}
 
-//	public Value getValue() throws Exception {
-//		Value lv = left.getValue();
-//		Value rv = right.getValue();
-//		if (lv == null || rv == null) {
-//			throw new Exception("null is not cal-able");
-//		}
-//		if (lv.getType() == ValueType.STRING || 
-//				rv.getType() == ValueType.STRING) {
-//			switch(op) {
-//			case EQ:
-//				return new ValueImpl(lv.getSValue().equals(rv.getSValue()));
-//			case NE:
-//				return new ValueImpl(!lv.getSValue().equals(rv.getSValue()));
-//				default:
-//					throw new Exception("invalid operator.");
-//			}
-//		}
-//		
-//		switch(op) {
-//		case LT:
-//			return new ValueImpl(lv.getDValue() < rv.getDValue());
-//		case LE:
-//			return new ValueImpl(lv.getDValue() <= rv.getDValue());
-//		case GT:
-//			return new ValueImpl(lv.getDValue() > rv.getDValue());
-//		case GE:
-//			return new ValueImpl(lv.getDValue() >= rv.getDValue());
-//		case EQ:
-//			return new ValueImpl(lv.getDValue() == rv.getDValue());
-//		case NE:
-//			return new ValueImpl(lv.getDValue() != rv.getDValue());
-//		default:
-//			throw new Exception("invalid condition.");
-//		}
-//		
-//	}
+	public Value getValue() throws Exception {
+		Value lv = left.getValue();
+		Value rv = right.getValue();
+		if (lv == null || rv == null) {
+			throw new Exception("null is not cal-able");
+		}
+		if (lv.getType() == ValueType.STRING || 
+				rv.getType() == ValueType.STRING) {
+			switch(op) {
+			case EQ:
+				return new ValueImpl(lv.getSValue().equals(rv.getSValue()));
+			case NE:
+				return new ValueImpl(!lv.getSValue().equals(rv.getSValue()));
+				default:
+					throw new Exception("invalid operator.");
+			}
+		}
+		
+		switch(op) {
+		case LT:
+			return new ValueImpl(lv.getDValue() < rv.getDValue());
+		case LE:
+			return new ValueImpl(lv.getDValue() <= rv.getDValue());
+		case GT:
+			return new ValueImpl(lv.getDValue() > rv.getDValue());
+		case GE:
+			return new ValueImpl(lv.getDValue() >= rv.getDValue());
+		case EQ:
+			return new ValueImpl(lv.getDValue() == rv.getDValue());
+		case NE:
+			return new ValueImpl(lv.getDValue() != rv.getDValue());
+		default:
+			throw new Exception("invalid condition.");
+		}
+		
+	}
 
 	@Override
 	public String toString() {

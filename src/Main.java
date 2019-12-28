@@ -1,6 +1,6 @@
 import newlang3.*;
 import newlang4.*;
-
+import newlang5.*;
 public class Main{
 
     public static void main(String[] args) throws Exception {
@@ -30,23 +30,29 @@ public class Main{
         
         
         
-        /* newlang4 */
+        
         //System.out.println("basic parser");
         Environment		env = new Environment(la);
         LexicalUnit		first = la.get();
         la.unget(first);
         
+        /* newlang4 */
+//        if (ProgramNode.isFirst(first)) {
+//        	Node handler = ProgramNode.getHandler(first, env);
+//        	handler.parse();
+//        	System.out.println(handler);
+//        }
+//        else System.out.println("syntax error");
         
+        
+        
+        /* newlang5 */
         if (ProgramNode.isFirst(first)) {
         	Node handler = ProgramNode.getHandler(first, env);
         	handler.parse();
-        	System.out.println(handler);
+        	System.out.println(handler.getValue());
         }
         else System.out.println("syntax error");
-        
-        
-        
-
     }
 
 }

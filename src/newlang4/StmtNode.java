@@ -62,7 +62,7 @@ public class StmtNode extends Node{
 			return EndNode.getHandler(env);
 		default:
 			throw new InternalError("A type which is not fit in StmtNode.");
-	}
+		}
 	}
 	
 	@Override

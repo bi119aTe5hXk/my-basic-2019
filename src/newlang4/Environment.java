@@ -13,7 +13,7 @@ public class Environment {
 	    public Environment(LexicalAnalyzer my_input) {
 	        input = my_input;
 	        library = new Hashtable();
-	        //library.put("PRINT", new PrintFunction() );
+	        library.put("PRINT", new PrintFunction() );
 	        var_table = new Hashtable();
 	    }
 	    

@@ -3,23 +3,19 @@ package newlang3;
 /**
  * Value interface
  */
-public abstract class Value {
+public interface Value {
 	// conststra
 	
-    public Value(String s) {
-    };
-
-    public Value(int i) {
-    };
-
-    public Value(double d) {
-    };
-
-    public Value(boolean b) {
-    };
-
-    public Value(String s, ValueType t) {
-    };
+//    public Value(String s) {
+//    };
+//    public Value(int i) {
+//    };
+//    public Value(double d) {
+//    };
+//    public Value(boolean b) {
+//    };
+//    public Value(String s, ValueType t) {
+//    };
 
 	public abstract String getSValue();
 

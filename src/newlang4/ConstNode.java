@@ -35,6 +35,11 @@ public class ConstNode extends Node{
 	public static Node getHandler(Value v,Environment env){
 		return new ConstNode(env,v);
 	}
+	@Override
+	public Value getValue(){
+		return val;
+	}
+	@Override
 	public String toString() {
         String str = "(const)";
         switch (type) {

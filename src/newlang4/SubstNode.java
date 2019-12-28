@@ -72,10 +72,12 @@ public class SubstNode extends Node {
 		return left + ":" + handler;
     }
 	
-//	@Override
-//	public Value getValue() {
-//		Value val = right.getValue();
+	@Override
+	public Value getValue() throws Exception{
+		Value val = handler.getValue();
+		env.getVariable(left).setValue(val);
 //		left.setValue(val);
 //		reutrn val;
-//	}
+		return null;
+	}
 }

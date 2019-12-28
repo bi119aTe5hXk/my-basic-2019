@@ -16,6 +16,7 @@ public static boolean isFirst(LexicalUnit lu) {
 	public static Node getHandler(Environment env) {
         return new EndNode(env);
     }
+	
 	@Override
 	public boolean parse() throws Exception {
 		LexicalUnit first = env.getInput().get();
@@ -24,8 +25,16 @@ public static boolean isFirst(LexicalUnit lu) {
 		}
 		return true;
 	}
+	
 	@Override
     public String toString() {
         return "END";
     }
+	
+	@Override
+	public Value getValue(){
+		System.exit(0);
+		return null;
+	}
+	
 }

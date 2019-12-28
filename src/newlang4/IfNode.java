@@ -110,15 +110,15 @@ public class IfNode extends Node {
 			throw new Exception("missing " + type);
 		}
 	}
-//	@Override
-//	public Value getValue() throws Exception {
-//        if (condition.getValue().getBValue()) {
-//        	op.getValue();
-//        } else if (elseop != null) {
-//        	elseop.getValue();
-//        }
-//        return null;
-//    }
+	@Override
+	public Value getValue() throws Exception {
+        if (condition.getValue().getBValue()) {
+        	op.getValue();
+        } else if (elseop != null) {
+        	elseop.getValue();
+        }
+        return null;
+    }
 	@Override
 	public String toString() {
 		String str="IF(" + condition + "){"+op+"} ";

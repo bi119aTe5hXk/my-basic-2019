@@ -73,7 +73,7 @@ public class LoopNode extends Node {
 				op = StmtListNode.getHandler(env);
 				op.parse();
 			} else {
-				throw new Exception("missing condition for do.");
+				throw new Exception("condition syntax error");
 			}
 			
 			while(env.getInput().expect(LexicalType.NL)) {//skip all NL before LOOP
@@ -129,10 +129,13 @@ public class LoopNode extends Node {
 		}
 		return true;
 	}
+	
 	private boolean isEnd() throws Exception {
 		return ((!condition.getValue().getBValue() && untilF) || 
 				(condition.getValue().getBValue() && !untilF));
 	}
+	
+	@Override
 	public Value getValue() throws Exception {
         if (doF) 
         	op.getValue();
@@ -144,6 +147,7 @@ public class LoopNode extends Node {
             op.getValue();
         }
     }
+	
 	@Override
 	public String toString() {
 		String str = "";
