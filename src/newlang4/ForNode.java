@@ -9,7 +9,7 @@ public class ForNode extends Node {
 	Node subst; 
 	Node max; 
 	Node op; 
-	String step;
+	String update;
 	static Set<LexicalType> first = new HashSet<LexicalType>(Arrays.asList(
 			LexicalType.FOR
 			));
@@ -28,10 +28,6 @@ public class ForNode extends Node {
 
 	@Override
 	public boolean parse() throws Exception {
-		if (!env.getInput().expect(LexicalType.FOR)) {
-			throw new Exception("for not found");
-		}
-
 		env.getInput().get();// skip FOR
 
 		LexicalUnit lu = env.getInput().peek();
@@ -41,18 +37,19 @@ public class ForNode extends Node {
         } else {
             throw new Exception("For syntax error.");
         }
-		if (env.getInput().get().getType() != LexicalType.TO) 
-			throw new Exception("Missing TO");
 		
+		check(LexicalType.TO);
+		
+		//set max
 		if (env.getInput().peek().getType() == LexicalType.INTVAL){
-            lu = env.getInput().get();
-            max = ConstNode.getHandler(env.getInput().get().getValue(), env);
+            //lu = env.getInput().get();
+            max = ConstNode.getHandler(env,env.getInput().get().getValue());
         } else {
             throw new Exception("missing max value");
         }
 		
-		if (env.getInput().get().getType() != LexicalType.NL) 
-			throw new Exception("missing new line.");
+		check(LexicalType.NL);
+		
 		
 		if (StmtListNode.isFirst(lu)){
             op = StmtListNode.getHandler(env);
@@ -61,16 +58,26 @@ public class ForNode extends Node {
         	throw new Exception("missing stmt_list.");
         }
 		
-		if (env.getInput().get().getType() != LexicalType.NEXT) 
-			throw new Exception("missing next.");
+		check(LexicalType.NL);
 		
-		if (lu.getType() == LexicalType.NAME) 
-			step = env.getInput().get().getValue().getSValue();
-        else 
+		check(LexicalType.NEXT);
+		
+		if (lu.getType() == LexicalType.NAME) {
+			update = env.getInput().get().getValue().getSValue();
+		}else {
         	throw new Exception("missing name for update.");
-		
+		}
 		return true;
 	}
+	
+	private void check(LexicalType type) throws Exception{
+		if (env.getInput().expect(type)){
+			env.getInput().get();
+		} else {
+			throw new Exception("missing " + type);
+		}
+	}
+	
 //	public Value getValue() throws Exception {
 //        subst.getValue();
 //        while (true) {
@@ -85,6 +92,6 @@ public class ForNode extends Node {
 //    }
 	@Override
 	public String toString() {
-        return String.format("FOR("+ subst +" TO "+ max+" ){"+op+"}"+step);
+        return String.format("FOR(FROM:"+ subst +" TO "+ max+";(update_object)" + update + "){"+op+"} ");
     }
 }

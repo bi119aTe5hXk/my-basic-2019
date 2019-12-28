@@ -64,7 +64,7 @@ public class ExprListNode extends Node {
 	
 	@Override
 	public String toString() {
-		String str = "ExprList:";
+		String str = "";
         for (int i = 0; i < list.size(); i++) {
         	str += list.get(i) + " ";
         }

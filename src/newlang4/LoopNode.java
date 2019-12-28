@@ -34,43 +34,47 @@ public class LoopNode extends Node {
 			if (CondNode.isFirst(env.getInput().peek())) {
 				condition = CondNode.getHandler(env);
 				condition.parse();
-			} else
-				throw new Exception("syntax error. condition is missing.");
+			} else {
+				throw new Exception("missing condition.");
+				}
 
-			if (env.getInput().get().getType() != LexicalType.NL)
-				throw new Exception("syntax error. missing newline.");
+			if (env.getInput().get().getType() != LexicalType.NL) {
+				throw new Exception("missing NL.");
+			}
 
 			if (StmtListNode.isFirst(env.getInput().peek())) {
 				op = StmtListNode.getHandler(env);
 				op.parse();
-			} else
-				throw new Exception("syntax error. missing condition for while. ");
+			} else {
+				throw new Exception("missing condition");
+			}
 
-			if (env.getInput().get().getType() != LexicalType.NL)
-				throw new Exception("syntax error. missing newline.");
+			if (env.getInput().get().getType() != LexicalType.NL) {
+				throw new Exception("missing NL.");
+			}
 
 			if (env.getInput().expect(LexicalType.WEND)) {
 				env.getInput().get();
-			} else
-				throw new Exception("syntax error. missing wend.");
+			} else {
+				throw new Exception("missing WEND.");
+			}
 
 		} else if (env.getInput().expect(LexicalType.DO)) {
-			env.getInput().get();
-
 			doF = true;
-
+			
+			env.getInput().get();
 			doCond();
 
-			if (env.getInput().expect(LexicalType.NL))
+			while (env.getInput().expect(LexicalType.NL)) {
 				env.getInput().get();
-			else
-				throw new Exception("syntax error. missing NL.");
+			}
 
 			if (StmtListNode.isFirst(env.getInput().peek())) {
 				op = StmtListNode.getHandler(env);
 				op.parse();
-			} else
-				throw new Exception("syntax error. missing condition for do. ");
+			} else {
+				throw new Exception("missing condition for do.");
+			}
 			
 			while(env.getInput().expect(LexicalType.NL)) {//skip all NL before LOOP
 				env.getInput().get();
@@ -78,12 +82,14 @@ public class LoopNode extends Node {
 			
 			if (env.getInput().expect(LexicalType.LOOP)) {
 				env.getInput().get();
-			} else
+			} else {
 				throw new Exception("syntax error. missing loop.");
-
+			}
+			
 			if (condition == null) {
-				if (!doCond())
+				if (!doCond()) {
 					throw new Exception("syntax error. missing condition");
+				}
 			}
 		} else {
 			throw new Exception("syntax error. missing operator.");
@@ -103,8 +109,9 @@ public class LoopNode extends Node {
 			if (CondNode.isFirst(env.getInput().peek())) {
 				condition = CondNode.getHandler(env);
 				condition.parse();
-			} else
+			} else {
 				throw new Exception("syntax error. missing condition.");
+			}
 			break;
 
 		case WHILE:
@@ -113,25 +120,27 @@ public class LoopNode extends Node {
 			if (CondNode.isFirst(env.getInput().peek())) {
 				condition = CondNode.getHandler(env);
 				condition.parse();
-			} else
+			} else {
 				throw new Exception("syntax error. missing condition.");
+			}
 			break;
 		default:
 			return false;
 		}
 		return true;
 	}
-	private boolean judge() throws Exception {
-		return ((condition.getValue().getBValue() && !untilF) || 
-			(!condition.getValue().getBValue() && untilF));
+	private boolean isEnd() throws Exception {
+		return ((!condition.getValue().getBValue() && untilF) || 
+				(condition.getValue().getBValue() && !untilF));
 	}
 	public Value getValue() throws Exception {
         if (doF) 
         	op.getValue();
         
         while (true) {
-            if(!judge()) 
+            if(!isEnd()) {
             	return null;
+            }
             op.getValue();
         }
     }
@@ -144,7 +153,7 @@ public class LoopNode extends Node {
 			str += "LOOP(";
 		}
 		if (untilF) {
-			str += "!";
+			str += "UNTIL ";
 		}
 		str += condition + "){";
 

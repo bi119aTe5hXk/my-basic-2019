@@ -55,7 +55,7 @@ public class StmtListNode extends Node{
 
 			Node handler=null;
 			LexicalUnit lu = env.getInput().peek();
-			
+			//System.out.println(lu.getType());
 			if (StmtNode.isFirst(lu)){
 				
 				handler = StmtNode.getHandler(env);

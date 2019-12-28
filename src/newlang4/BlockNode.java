@@ -8,6 +8,7 @@ public class BlockNode extends Node {
 			LexicalType.IF
 		));
 		public static boolean isFirst(LexicalUnit lu) {
+			
 			return first.contains(lu.getType());
 		}
 		public static Node getHandler(LexicalUnit lu, Environment env) {

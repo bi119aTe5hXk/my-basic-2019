@@ -39,8 +39,9 @@ public class CallNode extends Node {
 			args.parse();
         }
 		if (bracket) {
-            if(env.getInput().get().getType() != LexicalType.RP) 
+            if(env.getInput().get().getType() != LexicalType.RP) {
             	throw new Exception("syntax error. missing ')' in function.");
+            }
         }
 		
 		return true;

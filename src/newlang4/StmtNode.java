@@ -53,7 +53,7 @@ public class StmtNode extends Node{
 			} else if (ExprListNode.isFirst(lu)){
 				return CallNode.getHandler(env);
 				
-			} else {
+			}else {
 				throw new InternalError("Syntax error.");
 			}
 		case FOR:

@@ -52,15 +52,18 @@ public class ExprNode extends Node{
                 case SUB:
                     LexicalType inputType = env.getInput().peek(2).getType();
 
-                    if ((inputType == LexicalType.INTVAL) || (inputType == LexicalType.DOUBLEVAL) || (inputType == LexicalType.LP)) {
+                    if ((inputType == LexicalType.INTVAL) || 
+                    	(inputType == LexicalType.DOUBLEVAL) || 
+                    	(inputType == LexicalType.LP)) {
 
                         env.getInput().get();
                         
                         exprlist.add(ConstNode.getHandler(new ValueImpl("-1", ValueType.INTEGER), env));
                         addOp(exprlist, oplist, LexicalType.MUL);
-                    } else
+                        continue;
+                    } else {
                         throw new Exception("syntax error.");
-                    break;
+                    }
 
                 case LP:
                     env.getInput().get();
@@ -69,8 +72,9 @@ public class ExprNode extends Node{
                     exprHandler.parse();
                     exprlist.add(exprHandler);
 
-                    if (env.getInput().get().getType() != LexicalType.RP)
-                        throw new Exception("Syntax error. ')' is missing");
+                    if (env.getInput().get().getType() != LexicalType.RP) {
+                        throw new Exception("')' is missing");
+                    }
                     break;
 
                 case NAME:
@@ -79,33 +83,43 @@ public class ExprNode extends Node{
                         callSub.parse();
                         exprlist.add(callSub);
 
-                    } else 
+                    } else {
                     	exprlist.add(env.getVariable(env.getInput().get().getValue().getSValue()));
+                    }
                     break;
-
+                    
+                //numbers   
                 case INTVAL:
                 case DOUBLEVAL:
                 case LITERAL:
-                	exprlist.add(ConstNode.getHandler(env.getInput().get().getValue(), env));
+                	exprlist.add(ConstNode.getHandler(env,env.getInput().get().getValue()));
                     break;
+                    
                 default:
                     throw new Exception("syntax error.");
             }
 
-            if (opmap.containsKey(env.getInput().peek(1).getType())) {
-            	addOp(exprlist, oplist, env.getInput().get().getType());
-            } else break;
+            if (opmap.containsKey(env.getInput().peek().getType())) {
+            	addOp(exprlist, 
+            			oplist, 
+            			env.getInput().get().getType());
+            } else {
+            	break;
+            }
 
         }
 
         for (int i = oplist.size() - 1; i >= 0; i--) {
-            if (oplist.size() == 1) {
+            if (i == 0) {
                 left = exprlist.get(0);
                 right = exprlist.get(1);
                 op = oplist.get(0);
                 return true;
             }
-            exprlist.add(new ExprNode(exprlist.get(exprlist.size() - 2), exprlist.get(exprlist.size() - 1), oplist.get(i)));
+            exprlist.add(new ExprNode(
+            		exprlist.get(exprlist.size() - 2), 
+            		exprlist.get(exprlist.size() - 1), 
+            		oplist.get(i)));
             exprlist.remove(exprlist.size() - 3);
             exprlist.remove(exprlist.size() - 2);
         }
@@ -124,8 +138,9 @@ public class ExprNode extends Node{
                 r_list.remove(r_list.size() - 3);
                 r_list.remove(r_list.size() - 2);
                 op_list.remove(i);
-            } else if (flag && opmap.get(op_list.get(i)) >= opmap.get(type)) 
+            } else if (flag && opmap.get(op_list.get(i)) >= opmap.get(type)) {
             	break;
+            }
         }
         op_list.add(type);
     }
@@ -139,10 +154,11 @@ public class ExprNode extends Node{
         	throw new Exception("null can't be caled");
 
         if (leftVal.getType() == ValueType.STRING || rightVal.getType() == ValueType.STRING) {
-            if (op == LexicalType.ADD) return new
-            		ValueImpl(leftVal.getSValue() + rightVal.getSValue(), ValueType.STRING);
-            else 
+            if (op == LexicalType.ADD) {
+            	return new ValueImpl(leftVal.getSValue() + rightVal.getSValue(), ValueType.STRING);
+            } else {
             	throw new Exception("invalid operator for string");
+            	}
         }
 
         double result;
@@ -165,10 +181,12 @@ public class ExprNode extends Node{
             	throw new Exception("invalid operator");
         }
 
-        if (leftVal.getType() == ValueType.DOUBLE || rightVal.getType() == ValueType.DOUBLE) 
+        if (leftVal.getType() == ValueType.DOUBLE || 
+        	rightVal.getType() == ValueType.DOUBLE) {
         	return new ValueImpl(result);
-        else 
+        } else {
         	return new ValueImpl((int)result);
+        }
     }
 	
 	@Override
