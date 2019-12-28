@@ -67,7 +67,7 @@ public class LexicalUnit {
         case GE:
             return ("GE");
         case DO:
-            return ("DO");
+            return ("DO");//missing
         case DOT:
             return ("DOT");
         case WHILE:

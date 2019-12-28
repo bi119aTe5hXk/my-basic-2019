@@ -1,5 +1,4 @@
-package newlang3;
-
+package newlang4;
 public enum NodeType {
 	PROGRAM,
 	STMT_LIST,

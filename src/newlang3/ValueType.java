@@ -1,5 +1,4 @@
 package newlang3;
-
 /**
  * ValueType
  */

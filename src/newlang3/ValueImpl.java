@@ -51,7 +51,6 @@ public class ValueImpl extends Value {
 
     @Override
     public String getSValue() {
-    	
     	return this.val;
     }
 

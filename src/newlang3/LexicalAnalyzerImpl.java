@@ -1,14 +1,12 @@
 package newlang3;
 
 import java.io.*;
-import java.io.FileReader;
-import java.io.PushbackReader;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class LexicalAnalyzerImpl implements LexicalAnalyzer {
 	private PushbackReader reader;
 	private static int nextchar;
+	
 
 	private static String LITERAL = "^\".*\"$";
 	private static String NUM = "^[0-9]+\\.?[0-9]*$";
@@ -18,9 +16,12 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
 
 	private static Map<String, LexicalUnit> op = new HashMap<String, LexicalUnit>();
 	private static Map<String, LexicalUnit> special = new HashMap<String, LexicalUnit>();
+	
+	//private Deque<LexicalUnit> stack = new ArrayDeque<LexicalUnit>();
+	private static Stack<LexicalUnit> stack = new Stack<LexicalUnit>();
 
 	static {
-		op.put("DO", new LexicalUnit(LexicalType.DO));// not work
+		op.put("DO", new LexicalUnit(LexicalType.DO));
 		op.put("WHILE", new LexicalUnit(LexicalType.WHILE));
 		op.put("UNTIL", new LexicalUnit(LexicalType.UNTIL));
 		op.put("LOOP", new LexicalUnit(LexicalType.LOOP));
@@ -57,8 +58,8 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
 		special.put(">=", new LexicalUnit(LexicalType.GE));
 		special.put("=>", new LexicalUnit(LexicalType.GE));
 		special.put("<>", new LexicalUnit(LexicalType.NE));
-		special.put(")", new LexicalUnit(LexicalType.LP));
-		special.put("(", new LexicalUnit(LexicalType.RP));
+		special.put("(", new LexicalUnit(LexicalType.LP));
+		special.put(")", new LexicalUnit(LexicalType.RP));
 		special.put(",", new LexicalUnit(LexicalType.COMMA));
 	}
 
@@ -69,34 +70,39 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
 
 	@Override
 	public LexicalUnit get() throws IOException {
+		if (!stack.isEmpty()) 
+		      return stack.pop();
+		    
 		int c = -1;
 		do {
 			c = reader.read();
 		} while (String.valueOf((char) c).matches(SPACE));
 
-		if (c == -1 || nextchar == -1) {
+		if (c == -1 || nextchar == -1) 
 			return new LexicalUnit(LexicalType.EOF);
-		}
+		
 
 		String target = String.valueOf((char) c);
-		if (target.matches(NAME)) {
+		
+		
+		if (target.matches(NAME)) 
 			return getName(target);
-		} else if (target.matches("\"")) {
+		 else if (target.matches("\"")) 
 			return getLiteral(target);
-		} else if (target.matches(INT)) {
+		 else if (target.matches(INT)) 
 			return getNumber(target);
-		} else if (special.containsKey(target)) {
+		 else if (special.containsKey(target)) 
 			return getSpecial(target);
-		} else {
-			System.err.println("Error: unknow char:" + (char) c);
-			return null;
-		}
+		 else 
+			System.err.println("Error: unknow char:" + (char) c);return null;
+			
 	}
 
 	private LexicalUnit getName(String target) throws IOException {
 		while (true) {
 			nextchar = reader.read();
 			String str = String.valueOf((char) nextchar);
+			
 			if ((target + str).matches(NAME)) {
 				target += str;
 			} else {
@@ -164,14 +170,48 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
 		}
 		
 	}
+	@Override
+	public LexicalUnit peek() throws Exception {
+		//back 1 unit
+//	    LexicalUnit lu = get();
+//	    unget(lu);
+//	    return lu;
+		return peek(1);
+	  }
+	
+	@Override
+	public LexicalUnit peek(int n) throws Exception {
+        List<LexicalUnit> list = new ArrayList<>();
+        int i=0;
+        
+        for (i = 0; i < n - 1; i++) {
+        	list.add(get());
+        }
+//        LexicalUnit lu = list.get(list.size()-1);
+        LexicalUnit lu = get();
+        unget(lu);
+
+        for (i = n - 2; i >= 0; i--) {
+            unget(list.get(i));
+        }
+        
+//        while(!list.isEmpty()) {
+//            unget(list.get(list.size() - 1));
+//            list.remove(list.size() - 1);
+//        }
+        return lu;
+    }
 
 	@Override
 	public boolean expect(LexicalType type) throws Exception {
-		return false;
+		return peek().getType() == type;
 	}
 
 	@Override
-	public void unget(LexicalUnit token) throws Exception {
-	}
+	public void unget(LexicalUnit token) {
+		stack.push(token);
+    }
+
+	
 
 }
